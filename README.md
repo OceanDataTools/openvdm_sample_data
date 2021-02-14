@@ -1,2 +1,3 @@
 # openvdm_sample_data
-Sample data for OpenVDM project
+
+This repository contains the sample configuration data and raw data files used to testing the OpenVDM project.
