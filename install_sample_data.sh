@@ -399,7 +399,7 @@ function update_openvdm {
     read -p "Samba Password for ${DEFAULT_OPENVDM_USER}? " OPENVDM_SMBUSER_PASSWD
     read -p "MySQL Server root password? " DATABASE_ROOT_PASSWORD
 
-    DB_EXISTS=`mysqlshow --user=root --password=${DATABASE_ROOT_PASSWORD} OpenVDMv2| grep -v Wildcard`
+    DB_EXISTS=`mysqlshow --user=root --password=${DATABASE_ROOT_PASSWORD} openvdm | grep -v Wildcard`
     if [ $? == 0 ]; then
         sed -e "s|${DEFAULT_SAMPLE_DATA_ROOT}|${SAMPLE_DATA_ROOT}|" ~/openvdm_sample_data/openvdm_sample_data.sql | \
         sed -e "s/${DEFAULT_OPENVDM_USER}/${OPENVDM_USER}/" | \
