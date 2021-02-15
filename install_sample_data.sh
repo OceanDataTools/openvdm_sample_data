@@ -518,5 +518,16 @@ echo "#####################################################################"
 echo "Configuring Rsync Server"
 configure_rsync
 
+echo "#####################################################################"
+echo "Before the sample data and tranfer configurations will work you must"
+echo "goto the main configuration tab and run the following tasks:"
+echo " - Rebuild Cruise Directory"
+echo " - Re-export the OpenVDM Configuration"
+echo " - Rebuild Lowering Directory (if using lowerings)"
+echo " - Re-export the Lowering Configuration (if using lowerings)"
+echo " - Rebuild Data Dashboard"
+echo " - Rebuild MD5 Summary"
+echo "#####################################################################"
+
 #########################################################################
 #########################################################################
