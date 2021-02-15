@@ -178,7 +178,7 @@ CREATE TABLE `OVDM_ShipToShoreTransfers` (
 
 LOCK TABLES `OVDM_ShipToShoreTransfers` WRITE;
 /*!40000 ALTER TABLE `OVDM_ShipToShoreTransfers` DISABLE KEYS */;
-INSERT INTO `OVDM_ShipToShoreTransfers` VALUES (1,'DashboardData','Dashboard Data',1,0,2,'*',1,1),(2,'TransferLogs','Transfer Logs',1,0,1,'*',0,1),(3,'MD5Summary','MD5 Summary',1,0,0,'MD5_Summary.txt,MD5_Summary.md5 ',1,1),(4,'OVDM_Config','OpenVDM Configuration',1,0,0,'ovdmConfig.json',1,1),(5,'GGA_FILES','GGA Files',1,1,0,'*GGA*.Raw',1,0),(6,'MET','Met raw files',3,1,0,'*MET-M01*.Raw,*TSG-RAW*.Raw',1,0);
+INSERT INTO `OVDM_ShipToShoreTransfers` VALUES (1,'DashboardData','Dashboard Data',1,0,2,'*',1,1),(2,'TransferLogs','Transfer Logs',1,0,1,'*',0,1),(3,'MD5Summary','MD5 Summary',1,0,0,'MD5_Summary.txt,MD5_Summary.md5 ',1,1),(4,'OVDM_Config','OpenVDM Configuration',1,0,0,'ovdmConfig.json',1,1),(5,'GGA_FILES','GGA Files',1,1,0,'*_GGA-*.txt',1,0),(6,'MET','Met raw files',3,1,0,'*MET-*.txt,*TSG_Raw-*.txt',1,0);
 /*!40000 ALTER TABLE `OVDM_ShipToShoreTransfers` ENABLE KEYS */;
 UNLOCK TABLES;
 
