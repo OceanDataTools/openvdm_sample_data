@@ -423,22 +423,22 @@ EOF
 
     cd ${startingDir}
 
-    cp  $(INSTALL_ROOT)/openvdm/plugin/em302_plugin.py.dist $(INSTALL_ROOT)/openvdm/plugin/em302_plugin.py
-    cp  $(INSTALL_ROOT)/openvdm/plugin/parsers/geotiff_parser.py.dist $(INSTALL_ROOT)/openvdm/plugin/parsers/geotiff_parser.py
+    cp  ${INSTALL_ROOT}/openvdm/plugin/em302_plugin.py.dist ${INSTALL_ROOT}/openvdm/plugin/em302_plugin.py
+    cp  ${INSTALL_ROOT}/openvdm/plugin/parsers/geotiff_parser.py.dist ${INSTALL_ROOT}/openvdm/plugin/parsers/geotiff_parser.py
 
-    cp  $(INSTALL_ROOT)/openvdm/plugin/openrvdas_plugin.py.dist $(INSTALL_ROOT)/openvdm/plugin/openrvdas_plugin.py
-    cp  $(INSTALL_ROOT)/openvdm/plugin/parsers/gga_parser.py.dist $(INSTALL_ROOT)/openvdm/plugin/parsers/gga_parser.py
-    cp  $(INSTALL_ROOT)/openvdm/plugin/parsers/met_parser.py.dist $(INSTALL_ROOT)/openvdm/plugin/parsers/met_parser.py
-    cp  $(INSTALL_ROOT)/openvdm/plugin/parsers/svp_parser.py.dist $(INSTALL_ROOT)/openvdm/plugin/parsers/svp_parser.py
-    cp  $(INSTALL_ROOT)/openvdm/plugin/parsers/tsg_parser.py.dist $(INSTALL_ROOT)/openvdm/plugin/parsers/tsg_parser.py
-    cp  $(INSTALL_ROOT)/openvdm/plugin/parsers/twind_parser.py.dist $(INSTALL_ROOT)/openvdm/plugin/parsers/twind_parser.py
+    cp  ${INSTALL_ROOT}/openvdm/plugin/openrvdas_plugin.py.dist ${INSTALL_ROOT}/openvdm/plugin/openrvdas_plugin.py
+    cp  ${INSTALL_ROOT}/openvdm/plugin/parsers/gga_parser.py.dist ${INSTALL_ROOT}/openvdm/plugin/parsers/gga_parser.py
+    cp  ${INSTALL_ROOT}/openvdm/plugin/parsers/met_parser.py.dist ${INSTALL_ROOT}/openvdm/plugin/parsers/met_parser.py
+    cp  ${INSTALL_ROOT}/openvdm/plugin/parsers/svp_parser.py.dist ${INSTALL_ROOT}/openvdm/plugin/parsers/svp_parser.py
+    cp  ${INSTALL_ROOT}/openvdm/plugin/parsers/tsg_parser.py.dist ${INSTALL_ROOT}/openvdm/plugin/parsers/tsg_parser.py
+    cp  ${INSTALL_ROOT}/openvdm/plugin/parsers/twind_parser.py.dist ${INSTALL_ROOT}/openvdm/plugin/parsers/twind_parser.py
 
-    cp  $(INSTALL_ROOT)/openvdm/plugin/rov_openrvdas_plugin.py.dist $(INSTALL_ROOT)/openvdm/plugin/rov_openrvdas_plugin.py
-    cp  $(INSTALL_ROOT)/openvdm/plugin/parsers/comp_pres_parser.py.dist $(INSTALL_ROOT)/openvdm/plugin/parsers/comp_pres_parser.py
-    cp  $(INSTALL_ROOT)/openvdm/plugin/parsers/ctd_parser.py.dist $(INSTALL_ROOT)/openvdm/plugin/parsers/ctd_parser.py
-    cp  $(INSTALL_ROOT)/openvdm/plugin/parsers/o2_parser.py.dist $(INSTALL_ROOT)/openvdm/plugin/parsers/o2_parser.py
-    cp  $(INSTALL_ROOT)/openvdm/plugin/parsers/paro_parser.py.dist $(INSTALL_ROOT)/openvdm/plugin/parsers/paro_parser.py
-    cp  $(INSTALL_ROOT)/openvdm/plugin/parsers/sprint_parser.py.dist $(INSTALL_ROOT)/openvdm/plugin/parsers/sprint_parser.py
+    cp  ${INSTALL_ROOT}/openvdm/plugin/rov_openrvdas_plugin.py.dist ${INSTALL_ROOT}/openvdm/plugin/rov_openrvdas_plugin.py
+    cp  ${INSTALL_ROOT}/openvdm/plugin/parsers/comp_pres_parser.py.dist ${INSTALL_ROOT}/openvdm/plugin/parsers/comp_pres_parser.py
+    cp  ${INSTALL_ROOT}/openvdm/plugin/parsers/ctd_parser.py.dist ${INSTALL_ROOT}/openvdm/plugin/parsers/ctd_parser.py
+    cp  ${INSTALL_ROOT}/openvdm/plugin/parsers/o2_parser.py.dist ${INSTALL_ROOT}/openvdm/plugin/parsers/o2_parser.py
+    cp  ${INSTALL_ROOT}/openvdm/plugin/parsers/paro_parser.py.dist ${INSTALL_ROOT}/openvdm/plugin/parsers/paro_parser.py
+    cp  ${INSTALL_ROOT}/openvdm/plugin/parsers/sprint_parser.py.dist ${INSTALL_ROOT}/openvdm/plugin/parsers/sprint_parser.py
 }
 
 
