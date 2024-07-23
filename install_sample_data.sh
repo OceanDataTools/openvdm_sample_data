@@ -225,7 +225,7 @@ pid file = /var/run/rsyncd.pid
     list = yes
     auth users = ${OPENVDM_USER}
     secrets file = /etc/rsyncd.passwd
-    hosts allow = 127.0.0.1/255.255.255.0
+    hosts allow = 127.0.0.1/255.255.255.0, localhost
 
 # Data source information
 [sample_dest]
@@ -236,7 +236,7 @@ pid file = /var/run/rsyncd.pid
     list = yes
     auth users = ${OPENVDM_USER}
     secrets file = /etc/rsyncd.passwd
-    hosts allow = 127.0.0.1/255.255.255.0
+    hosts allow = 127.0.0.1/255.255.255.0, localhost
 
 ### Added by openvdm_sample_data install script ###
 EOF
