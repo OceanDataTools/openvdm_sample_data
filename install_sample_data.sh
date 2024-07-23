@@ -62,7 +62,7 @@ function set_default_variables {
     # exists.
     DEFAULT_INSTALL_ROOT=/opt
 
-    DEFAULT_SAMPLE_DATA_ROOT=/vault/sample_data
+    DEFAULT_SAMPLE_DATA_ROOT=/data/sample_data
 
     DEFAULT_OPENVDM_REPO=https://github.com/oceandatatools/openvdm_sample_data
     DEFAULT_OPENVDM_BRANCH=master
