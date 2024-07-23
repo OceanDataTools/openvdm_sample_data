@@ -23,16 +23,20 @@ DROP TABLE IF EXISTS `OVDM_CollectionSystemTransfers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `OVDM_CollectionSystemTransfers` (
-  `collectionSystemTransferID` int unsigned NOT NULL AUTO_INCREMENT,
+  `collectionSystemTransferID` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` tinytext NOT NULL,
   `longName` text,
-  `cruiseOrLowering` int unsigned NOT NULL DEFAULT '0',
+  `cruiseOrLowering` int(1) unsigned NOT NULL DEFAULT '0',
   `sourceDir` tinytext,
   `destDir` tinytext,
-  `staleness` int DEFAULT '0',
+  `staleness` int(11) DEFAULT '0',
+  `removeSourceFiles` int(1) unsigned NOT NULL DEFAULT '0',
   `useStartDate` tinyint(1) DEFAULT '0',
-  `transferType` int unsigned NOT NULL,
-  `localDirIsMountPoint` int unsigned NOT NULL DEFAULT '0',
+  `skipEmptyDirs` int(1) unsigned NOT NULL DEFAULT '1',
+  `skipEmptyFiles` int(1) unsigned NOT NULL DEFAULT '1',
+  `syncFromSource` int(1) unsigned NOT NULL DEFAULT '0',
+  `transferType` int(11) unsigned NOT NULL,
+  `localDirIsMountPoint` int(1) unsigned NOT NULL DEFAULT '0',
   `rsyncServer` tinytext,
   `rsyncUser` tinytext,
   `rsyncPass` tinytext,
@@ -42,15 +46,15 @@ CREATE TABLE `OVDM_CollectionSystemTransfers` (
   `smbDomain` tinytext,
   `sshServer` tinytext,
   `sshUser` tinytext,
-  `sshUseKey` int unsigned NOT NULL DEFAULT '0',
+  `sshUseKey` int(1) unsigned NOT NULL DEFAULT '0',
   `sshPass` tinytext,
   `includeFilter` text,
   `excludeFilter` text,
   `ignoreFilter` text,
-  `status` int unsigned NOT NULL DEFAULT '3',
+  `status` int(11) unsigned NOT NULL DEFAULT '3',
   `enable` tinyint(1) NOT NULL DEFAULT '0',
-  `pid` int unsigned DEFAULT '0',
-  `bandwidthLimit` int unsigned NOT NULL DEFAULT '0',
+  `pid` int(11) unsigned DEFAULT '0',
+  `bandwidthLimit` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`collectionSystemTransferID`),
   KEY `CollectionSystemTransferStatus` (`status`),
   KEY `CollectionSystemTransferType` (`transferType`),
@@ -65,7 +69,13 @@ CREATE TABLE `OVDM_CollectionSystemTransfers` (
 
 LOCK TABLES `OVDM_CollectionSystemTransfers` WRITE;
 /*!40000 ALTER TABLE `OVDM_CollectionSystemTransfers` DISABLE KEYS */;
-INSERT INTO `OVDM_CollectionSystemTransfers` VALUES (1,'OpenRVDAS','OpenRVDAS (SSH Server)',0,'/data/sample_data/ssh_source/OpenRVDAS','OpenRVDAS',0,0,4,0,'','','','','','','','127.0.0.1','survey',1,NULL,'*','','',2,1,0,0),(2,'XBT','XBT  (Authenticated SMB Share)',0,'XBT','XBT',0,0,3,0,'','','','//localhost/SampleAuthSource','survey','sample_smb_passwd','WORKGROUP','','',0,'','*{cruiseID}_XBT[0-9][0-9][0-9]_*','','',2,1,0,0),(3,'EM302','EM302 Multibeam (Rsync Server)',0,'/EM302','EM302',0,0,2,0,'localhost/sample_data','survey','b4dPassword!','','','','','','',0,'','*','','',2,1,0,0),(4,'CTD','SBE 911+ CTD (Local Directory)',0,'/data/sample_data/local_source/CTD','CTD ',0,0,1,0,'','','','','','','','','',0,'','*{cruiseID}_CTD[0-9][0-9][0-9]_*','','*decktest*',2,1,0,0),(5,'Sealog','Sealog (Guest SMB Share)',0,'sealog','Sealog',0,0,3,0,'','','','//localhost/SampleAnonSource','guest','','WORKGROUP','','',0,'','*','','',2,1,0,0),(7,'ROV_OpenRVDAS','OpenRVDAS collecting data for ROV',1,'/data/sample_data/local_source/OpenRVDAS','OpenRVDAS',0,0,1,0,'','','','','','','','','',0,'','*','','',2,1,0,0);
+INSERT INTO `OVDM_CollectionSystemTransfers` VALUES
+  (1,'OpenRVDAS','OpenRVDAS (SSH Server)',0,'/data/sample_data/ssh_source/OpenRVDAS','OpenRVDAS',0,0,0,1,1,0,4,0,'','','','','','','','127.0.0.1','survey',1,NULL,'*','','',2,1,0,0),
+  (2,'XBT','XBT  (Authenticated SMB Share)',0,'XBT','XBT',0,0,0,1,1,0,3,0,'','','','//localhost/SampleAuthSource','survey','sample_smb_passwd','WORKGROUP','','',0,'','*{cruiseID}_XBT[0-9][0-9][0-9]_*','','',2,1,0,0),
+  (3,'EM302','EM302 Multibeam (Rsync Server)',0,'/EM302','EM302',0,0,0,1,1,0,2,0,'localhost/sample_data','survey','b4dPassword!','','','','','','',0,'','*','','',2,1,0,0),
+  (4,'CTD','SBE 911+ CTD (Local Directory)',0,'/data/sample_data/local_source/CTD','CTD ',0,0,0,1,1,0,1,0,'','','','','','','','','',0,'','*{cruiseID}_CTD[0-9][0-9][0-9]_*','','*decktest*',2,1,0,0),
+  (5,'Sealog','Sealog (Guest SMB Share)',0,'sealog','Sealog',0,0,0,1,1,0,3,0,'','','','//localhost/SampleAnonSource','guest','','WORKGROUP','','',0,'','*','','',2,1,0,0),
+  (6,'ROV_OpenRVDAS','OpenRVDAS collecting data for ROV',1,'/data/sample_data/local_source/OpenRVDAS','OpenRVDAS',0,0,0,1,1,0,1,0,'','','','','','','','','',0,'','*','','',2,1,0,0);
 /*!40000 ALTER TABLE `OVDM_CollectionSystemTransfers` ENABLE KEYS */;
 UNLOCK TABLES;
 
