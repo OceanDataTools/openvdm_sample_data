@@ -147,7 +147,11 @@ CREATE TABLE `OVDM_ExtraDirectories` (
 
 LOCK TABLES `OVDM_ExtraDirectories` WRITE;
 /*!40000 ALTER TABLE `OVDM_ExtraDirectories` DISABLE KEYS */;
-INSERT INTO `OVDM_ExtraDirectories` VALUES (1,'Transfer_Logs','Transfer Logs','OpenVDM/TransferLogs',1,1),(2,'Dashboard_Data','Dashboard Data','OpenVDM/DashboardData',1,1),(3,'From_PublicData','Files copied from PublicData share','From_PublicData',1,1),(4,'Tracklines','Cruise Tracklines','Products/Tracklines',1,0);
+INSERT INTO `OVDM_ExtraDirectories` VALUES
+  (1,'Transfer_Logs','Transfer Logs',0,'OpenVDM/TransferLogs',1,1),
+  (2,'Dashboard_Data','Dashboard Data',0,'OpenVDM/DashboardData',1,1),
+  (3,'From_PublicData','Files copied from PublicData share',0,'From_PublicData',1,1),
+  (4,'Tracklines','Cruise Tracklines',0,'Products/Tracklines',1,0);
 /*!40000 ALTER TABLE `OVDM_ExtraDirectories` ENABLE KEYS */;
 UNLOCK TABLES;
 
