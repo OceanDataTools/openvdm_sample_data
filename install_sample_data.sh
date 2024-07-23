@@ -203,7 +203,7 @@ function configure_rsync {
     if [ -e /etc/rsyncd.conf ]; then
 
         mv /etc/rsyncd.conf /etc/rsyncd.conf.orig
-        sed -e '/### Added by openvdm_sample_data install script ###/,/### Added by openvdm_sample_data install script ###/d' /etc/rsyncd.conf.orig |
+        sed -e '### Added by openvdm_sample_data install script ###/,/### Added by openvdm_sample_data install script ###/d' /etc/rsyncd.conf.orig |
         sed -e :a -e '/^\n*$/{$d;N;};/\n$/ba'  > /etc/rsyncd.conf
     fi
 
@@ -238,7 +238,7 @@ pid file = /var/run/rsyncd.pid
     secrets file = /etc/rsyncd.passwd
     hosts allow = 127.0.0.1/255.255.255.0
 
-/### Added by openvdm_sample_data install script ###
+### Added by openvdm_sample_data install script ###
 EOF
 
     if [ -e /etc/rsyncd.passwd ]; then
@@ -249,11 +249,11 @@ EOF
     fi
 
     cat >> /etc/rsyncd.passwd <<EOF
-/### Added by openvdm_sample_data install script ###/
+### Added by openvdm_sample_data install script ###
 
 ${OPENVDM_USER}:b4dPassword!
 
-/### Added by openvdm_sample_data install script ###/
+### Added by openvdm_sample_data install script ###
 EOF
 
     chmod 600 /etc/rsyncd.passwd
