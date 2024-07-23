@@ -133,6 +133,7 @@ CREATE TABLE `OVDM_ExtraDirectories` (
   `extraDirectoryID` int unsigned NOT NULL AUTO_INCREMENT,
   `name` tinytext NOT NULL,
   `longName` tinytext,
+  `cruiseOrLowering` int(1) unsigned NOT NULL DEFAULT '0',
   `destDir` tinytext NOT NULL,
   `enable` tinyint(1) DEFAULT '0',
   `required` tinyint(1) NOT NULL DEFAULT '0',
