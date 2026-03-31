@@ -430,7 +430,7 @@ EOF
     cp  ${INSTALL_ROOT}/openvdm/server/plugins/parsers/gga_parser.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/parsers/gga_parser.py
     cp  ${INSTALL_ROOT}/openvdm/server/plugins/parsers/met_parser.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/parsers/met_parser.py
     cp  ${INSTALL_ROOT}/openvdm/server/plugins/parsers/svp_parser.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/parsers/svp_parser.py
-    cp  ${INSTALL_ROOT}/openvdm/server/plugins/parsers/tsg_parser.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/parsers/tsg_parser.py
+    cp  ${INSTALL_ROOT}/openvdm/server/plugins/parsers/tsg45_parser.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/parsers/tsg_parser.py
     cp  ${INSTALL_ROOT}/openvdm/server/plugins/parsers/twind_parser.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/parsers/twind_parser.py
 
     cp  ${INSTALL_ROOT}/openvdm/server/plugins/rov_openrvdas_plugin.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/rov_openrvdas_plugin.py
