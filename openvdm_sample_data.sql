@@ -110,6 +110,9 @@ CREATE TABLE `OVDM_CruiseDataTransfers` (
   `sshUser` tinytext,
   `sshUseKey` int(1) unsigned NOT NULL DEFAULT '0',
   `sshPass` tinytext,
+  `ftpServer` tinytext,
+  `ftpUser` tinytext,
+  `ftpPass` tinytext,
   `status` int(11) unsigned NOT NULL DEFAULT '3',
   `enable` tinyint(1) NOT NULL DEFAULT '0',
   `required` tinyint(1) NOT NULL DEFAULT '0',
@@ -124,7 +127,7 @@ CREATE TABLE `OVDM_CruiseDataTransfers` (
   KEY `CruiseDataTransferType` (`transferType`),
   CONSTRAINT `CruiseDataTransferStatus` FOREIGN KEY (`status`) REFERENCES `OVDM_Status` (`statusID`),
   CONSTRAINT `CruiseDataTransferType` FOREIGN KEY (`transferType`) REFERENCES `OVDM_TransferTypes` (`transferTypeID`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -133,12 +136,13 @@ CREATE TABLE `OVDM_CruiseDataTransfers` (
 
 LOCK TABLES `OVDM_CruiseDataTransfers` WRITE;
 /*!40000 ALTER TABLE `OVDM_CruiseDataTransfers` DISABLE KEYS */;
-INSERT INTO `OVDM_CruiseDataTransfers` (`cruiseDataTransferID`, `name`, `longName`, `skipEmptyDirs`, `skipEmptyFiles`, `syncToDest`, `transferType`, `destDir`, `localDirIsMountPoint`, `rsyncServer`, `rsyncUser`, `rsyncPass`, `smbServer`, `smbUser`, `smbPass`, `smbDomain`, `sshServer`, `sshUser`, `sshUseKey`, `sshPass`, `status`, `enable`, `required`, `pid`, `bandwidthLimit`, `includeOVDMFiles`, `includePublicDataFiles`, `excludedCollectionSystems`, `excludedExtraDirectories`) VALUES (1,'SSDW','Shoreside Data Warehouse',1,1,0,4,'/data/sample_data/ssdw',0,'','','','','','','','localhost','survey',1,NULL,2,1,1,0,128,0,0,'0','0'),
-(2,'Local_Copy','Cruise copy to local directory',1,1,0,1,'/data/sample_data/local_destination',0,'','','','','','','','','',0,'',2,1,0,0,0,0,0,'0','0'),
-(3,'Cruise_Auth_SMB','Cruise copy to authenticated SMB share',1,1,0,3,'/',0,'','','','//localhost/SampleAuthDestination','survey','sample_smb_passwd','WORKGROUP','','',0,'',2,1,0,0,0,0,0,'0','0'),
-(4,'Cruise_Anon_SMB','Cruise copy to anonymous SMB share',1,1,0,3,'/',0,'','','','//localhost/SampleAnonDestination','guest','','WORKGROUP','','',0,'',2,1,0,0,0,0,0,'0','0'),
-(5,'cruise_rsync','Cruise copy to rsync server',1,1,0,2,'/',0,'localhost/sample_dest','survey','b4dPassword!','','','','','','',0,'',2,1,0,0,0,0,0,'0','0'),
-(6,'cruise_ssh','Cruise copy to SSH server',1,1,0,4,'/data/sample_data/ssh_destination',0,'','','','','','','','localhost','survey',1,NULL,2,1,0,0,0,0,0,'0','0');
+INSERT INTO `OVDM_CruiseDataTransfers` (`cruiseDataTransferID`, `name`, `longName`, `skipEmptyDirs`, `skipEmptyFiles`, `syncToDest`, `transferType`, `destDir`, `localDirIsMountPoint`, `rsyncServer`, `rsyncUser`, `rsyncPass`, `smbServer`, `smbUser`, `smbPass`, `smbDomain`, `sshServer`, `sshUser`, `sshUseKey`, `sshPass`, `ftpServer`, `ftpUser`, `ftpPass`, `status`, `enable`, `required`, `pid`, `bandwidthLimit`, `includeOVDMFiles`, `includePublicDataFiles`, `excludedCollectionSystems`, `excludedExtraDirectories`) VALUES (1,'SSDW','Shoreside Data Warehouse',1,1,0,4,'/data/sample_data/ssdw',0,'','','','','','','','localhost','survey',1,NULL,NULL,NULL,NULL,2,1,1,0,128,0,0,'0','0'),
+(2,'Local_Copy','Cruise copy to local directory',1,1,0,1,'/data/sample_data/local_destination',0,'','','','','','','','','',0,'',NULL,NULL,NULL,2,1,0,0,0,0,0,'0','0'),
+(3,'Cruise_Auth_SMB','Cruise copy to authenticated SMB share',1,1,0,3,'/',0,'','','','//localhost/SampleAuthDestination','survey','sample_smb_passwd','WORKGROUP','','',0,'',NULL,NULL,NULL,2,1,0,0,0,0,0,'0','0'),
+(4,'Cruise_Anon_SMB','Cruise copy to anonymous SMB share',1,1,0,3,'/',0,'','','','//localhost/SampleAnonDestination','guest','','WORKGROUP','','',0,'',NULL,NULL,NULL,2,1,0,0,0,0,0,'0','0'),
+(5,'cruise_rsync','Cruise copy to rsync server',1,1,0,2,'/',0,'localhost/sample_dest','survey','b4dPassword!','','','','','','',0,'',NULL,NULL,NULL,2,1,0,0,0,0,0,'0','0'),
+(6,'cruise_ssh','Cruise copy to SSH server',1,1,0,4,'/data/sample_data/ssh_destination',0,'','','','','','','','localhost','survey',1,NULL,NULL,NULL,NULL,2,1,0,0,0,0,0,'0','0'),
+(7,'cruise_ftp','Cruise copy to FTP server',1,1,0,5,'/ftp_destination',0,'','','','','','','','','',0,'','127.0.0.1:2121','survey','sample_smb_passwd',2,1,0,0,0,0,0,'0','0');
 /*!40000 ALTER TABLE `OVDM_CruiseDataTransfers` ENABLE KEYS */;
 UNLOCK TABLES;
 
