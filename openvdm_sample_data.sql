@@ -48,6 +48,10 @@ CREATE TABLE `OVDM_CollectionSystemTransfers` (
   `sshUser` tinytext,
   `sshUseKey` int(1) unsigned NOT NULL DEFAULT '0',
   `sshPass` tinytext,
+  `ftpServer` tinytext,
+  `ftpPort` int(5) unsigned NOT NULL DEFAULT '21',
+  `ftpUser` tinytext,
+  `ftpPass` tinytext,
   `includeFilter` text,
   `excludeFilter` text,
   `ignoreFilter` text,
@@ -69,12 +73,12 @@ CREATE TABLE `OVDM_CollectionSystemTransfers` (
 
 LOCK TABLES `OVDM_CollectionSystemTransfers` WRITE;
 /*!40000 ALTER TABLE `OVDM_CollectionSystemTransfers` DISABLE KEYS */;
-INSERT INTO `OVDM_CollectionSystemTransfers` (`collectionSystemTransferID`, `name`, `longName`, `cruiseOrLowering`, `sourceDir`, `destDir`, `staleness`, `removeSourceFiles`, `useStartDate`, `skipEmptyDirs`, `skipEmptyFiles`, `syncFromSource`, `transferType`, `localDirIsMountPoint`, `rsyncServer`, `rsyncUser`, `rsyncPass`, `smbServer`, `smbUser`, `smbPass`, `smbDomain`, `sshServer`, `sshUser`, `sshUseKey`, `sshPass`, `includeFilter`, `excludeFilter`, `ignoreFilter`, `status`, `enable`, `pid`, `bandwidthLimit`) VALUES (1,'OpenRVDAS','OpenRVDAS (SSH Server)',0,'/data/sample_data/ssh_source/OpenRVDAS','OpenRVDAS',0,0,0,1,1,0,4,0,'','','','','','','','127.0.0.1','survey',1,NULL,'*','','',2,1,0,0),
-(2,'XBT','XBT  (Authenticated SMB Share)',0,'XBT','XBT',0,0,0,1,1,0,3,0,'','','','//localhost/SampleAuthSource','survey','sample_smb_passwd','WORKGROUP','','',0,'','*{cruiseID}_XBT[0-9][0-9][0-9]_*','','',2,1,0,0),
-(3,'EM302','EM302 Multibeam (Rsync Server)',0,'/EM302','EM302',0,0,0,1,1,0,2,0,'localhost/sample_data','survey','b4dPassword!','','','','','','',0,'','*','','',2,1,0,0),
-(4,'CTD','SBE 911+ CTD (Local Directory)',0,'/data/sample_data/local_source/CTD','CTD',0,0,0,1,1,0,1,0,'','','','','','','','','',0,'','*{cruiseID}_CTD[0-9][0-9][0-9]_*','','*decktest*',2,1,0,0),
-(5,'Sealog','Sealog (Guest SMB Share)',0,'sealog','Sealog',0,0,0,1,1,0,3,0,'','','','//localhost/SampleAnonSource','guest','','WORKGROUP','','',0,'','*','','',2,1,0,0),
-(6,'ROV_OpenRVDAS','OpenRVDAS collecting data for ROV',1,'/data/sample_data/local_source/OpenRVDAS','OpenRVDAS',0,0,0,1,1,0,1,0,'','','','','','','','','',0,'','*','','',2,1,0,0);
+INSERT INTO `OVDM_CollectionSystemTransfers` (`collectionSystemTransferID`, `name`, `longName`, `cruiseOrLowering`, `sourceDir`, `destDir`, `staleness`, `removeSourceFiles`, `useStartDate`, `skipEmptyDirs`, `skipEmptyFiles`, `syncFromSource`, `transferType`, `localDirIsMountPoint`, `rsyncServer`, `rsyncUser`, `rsyncPass`, `smbServer`, `smbUser`, `smbPass`, `smbDomain`, `sshServer`, `sshUser`, `sshUseKey`, `sshPass`, `ftpServer`, `ftpPort`, `ftpUser`, `ftpPass`, `includeFilter`, `excludeFilter`, `ignoreFilter`, `status`, `enable`, `pid`, `bandwidthLimit`) VALUES (1,'OpenRVDAS','OpenRVDAS (SSH Server)',0,'/data/sample_data/ssh_source/OpenRVDAS','OpenRVDAS',0,0,0,1,1,0,4,0,'','','','','','','','127.0.0.1','survey',1,NULL,NULL,21,NULL,NULL,'*','','',2,1,0,0),
+(2,'XBT','XBT  (Authenticated SMB Share)',0,'XBT','XBT',0,0,0,1,1,0,3,0,'','','','//localhost/SampleAuthSource','survey','sample_smb_passwd','WORKGROUP','','',0,'',NULL,21,NULL,NULL,'*{cruiseID}_XBT[0-9][0-9][0-9]_*','','',2,1,0,0),
+(3,'EM302','EM302 Multibeam (Rsync Server)',0,'/EM302','EM302',0,0,0,1,1,0,2,0,'localhost/sample_data','survey','b4dPassword!','','','','','','',0,'',NULL,21,NULL,NULL,'*','','',2,1,0,0),
+(4,'CTD','SBE 911+ CTD (Local Directory)',0,'/data/sample_data/local_source/CTD','CTD',0,0,0,1,1,0,1,0,'','','','','','','','','',0,'',NULL,21,NULL,NULL,'*{cruiseID}_CTD[0-9][0-9][0-9]_*','','*decktest*',2,1,0,0),
+(5,'Sealog','Sealog (Guest SMB Share)',0,'sealog','Sealog',0,0,0,1,1,0,3,0,'','','','//localhost/SampleAnonSource','guest','','WORKGROUP','','',0,'',NULL,21,NULL,NULL,'*','','',2,1,0,0),
+(6,'ROV_OpenRVDAS','OpenRVDAS collecting data for ROV (FTP Server)',1,'/ftp_source/OpenRVDAS','OpenRVDAS',0,0,0,1,1,0,5,0,'','','','','','','','','',0,'','127.0.0.1',2121,'survey','sample_smb_passwd','*','','',2,1,0,0);
 /*!40000 ALTER TABLE `OVDM_CollectionSystemTransfers` ENABLE KEYS */;
 UNLOCK TABLES;
 
