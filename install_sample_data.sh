@@ -423,22 +423,27 @@ EOF
 
     cd ${startingDir}
 
-    cp  ${INSTALL_ROOT}/openvdm/server/plugins/em302_plugin.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/em302_plugin.py
-    cp  ${INSTALL_ROOT}/openvdm/server/plugins/parsers/geotiff_parser.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/parsers/geotiff_parser.py
-
-    cp  ${INSTALL_ROOT}/openvdm/server/plugins/openrvdas_plugin.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/openrvdas_plugin.py
-    cp  ${INSTALL_ROOT}/openvdm/server/plugins/parsers/gga_parser.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/parsers/gga_parser.py
-    cp  ${INSTALL_ROOT}/openvdm/server/plugins/parsers/met_parser.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/parsers/met_parser.py
-    cp  ${INSTALL_ROOT}/openvdm/server/plugins/parsers/svp_parser.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/parsers/svp_parser.py
-    cp  ${INSTALL_ROOT}/openvdm/server/plugins/parsers/tsg45_parser.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/parsers/tsg_parser.py
-    cp  ${INSTALL_ROOT}/openvdm/server/plugins/parsers/twind_parser.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/parsers/twind_parser.py
-
-    cp  ${INSTALL_ROOT}/openvdm/server/plugins/rov_openrvdas_plugin.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/rov_openrvdas_plugin.py
-    cp  ${INSTALL_ROOT}/openvdm/server/plugins/parsers/comp_pres_parser.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/parsers/comp_pres_parser.py
-    cp  ${INSTALL_ROOT}/openvdm/server/plugins/parsers/ctd_parser.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/parsers/ctd_parser.py
-    cp  ${INSTALL_ROOT}/openvdm/server/plugins/parsers/o2_parser.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/parsers/o2_parser.py
-    cp  ${INSTALL_ROOT}/openvdm/server/plugins/parsers/paro_parser.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/parsers/paro_parser.py
-    cp  ${INSTALL_ROOT}/openvdm/server/plugins/parsers/sprint_parser.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/parsers/sprint_parser.py
+    # Enable the sample data plugins and the parsers they import. The parsers
+    # are read from each plugin's "from server.plugins.parsers.<name> import"
+    # lines, so the list can't fall behind the plugins (#6, as in
+    # OceanDataTools/openvdm#270).
+    local PLUGIN_DIR="${INSTALL_ROOT}/openvdm/server/plugins"
+    local plugin parser
+    for plugin in em302_plugin.py openrvdas_plugin.py rov_openrvdas_plugin.py; do
+        if [ ! -e "${PLUGIN_DIR}/${plugin}.dist" ]; then
+            echo "WARNING: ${plugin}.dist not found; plugin not enabled"
+            continue
+        fi
+        cp "${PLUGIN_DIR}/${plugin}.dist" "${PLUGIN_DIR}/${plugin}"
+        for parser in $(grep -oE '^from server\.plugins\.parsers\.[A-Za-z0-9_]+' "${PLUGIN_DIR}/${plugin}" | sed 's/.*\.//' | sort -u); do
+            if [ -e "${PLUGIN_DIR}/parsers/${parser}.py.dist" ]; then
+                cp "${PLUGIN_DIR}/parsers/${parser}.py.dist" "${PLUGIN_DIR}/parsers/${parser}.py"
+            else
+                echo "WARNING: ${plugin} imports ${parser}, but parsers/${parser}.py.dist was not found"
+            fi
+        done
+    done
+    chown -R "${OPENVDM_USER}:${OPENVDM_USER}" "${PLUGIN_DIR}"
 }
 
 
