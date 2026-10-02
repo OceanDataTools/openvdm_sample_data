@@ -22,6 +22,9 @@
 
 PREFERENCES_FILE='.install_openvdm_sample_data_preferences'
 
+# xbt-edf-qc commit installed for the XBT plugin (OpenVDM's installer uses the same)
+XBT_EDF_QC_COMMIT='a784145a2dc9462d8071747b5dfcfcfd2c3fee70'
+
 ###########################################################################
 ###########################################################################
 function exit_gracefully {
@@ -360,6 +363,66 @@ function configure_directories {
 
 ###########################################################################
 ###########################################################################
+# Local FTP server for the sample FTP transfers (ROV_OpenRVDAS, cruise_ftp),
+# set up as OpenVDM's installer does: pyftpdlib, run by Supervisor, listening
+# on localhost only (port 2121 supports MLSD, port 2122 doesn't). Its password
+# is the one the sample transfers are configured with (#19).
+function configure_ftp {
+    # Expect the following shell variables to be appropriately set:
+    # INSTALL_ROOT - path where OpenVDM is installed
+    # OPENVDM_USER - valid userid
+    # SAMPLE_DATA_ROOT - path to the sample data
+    # OPENVDM_SMBUSER_PASSWD - the sample transfers' password
+
+    local FTP_SERVER="${INSTALL_ROOT}/openvdm/utils/sample_ftp_server.py"
+    local SUPERVISOR_CONF_D SUPERVISOR_PROG_EXT
+
+    mkdir -p "${SAMPLE_DATA_ROOT}/ftp_source" "${SAMPLE_DATA_ROOT}/ftp_destination"
+    chown -R "${OPENVDM_USER}:${OPENVDM_USER}" "${SAMPLE_DATA_ROOT}/ftp_source" "${SAMPLE_DATA_ROOT}/ftp_destination"
+
+    if [ ! -e "${FTP_SERVER}" ]; then
+        echo "WARNING: ${FTP_SERVER} not found (it comes with OpenVDM 2.16); the sample FTP transfers won't run"
+        return
+    fi
+    if [ -d /etc/supervisor/conf.d ]; then
+        SUPERVISOR_CONF_D=/etc/supervisor/conf.d
+        SUPERVISOR_PROG_EXT=conf
+    elif [ -d /etc/supervisord.d ]; then
+        SUPERVISOR_CONF_D=/etc/supervisord.d
+        SUPERVISOR_PROG_EXT=ini
+    else
+        echo "WARNING: no Supervisor configuration directory found; the sample FTP transfers won't run"
+        return
+    fi
+
+    "${INSTALL_ROOT}/openvdm/venv/bin/pip" install pyftpdlib --quiet
+
+    printf '%s\n' "${OPENVDM_SMBUSER_PASSWD}" > /etc/openvdm_sample_ftp.passwd
+    chown "${OPENVDM_USER}:${OPENVDM_USER}" /etc/openvdm_sample_ftp.passwd
+    chmod 600 /etc/openvdm_sample_ftp.passwd
+
+    mkdir -p /var/log/openvdm
+    cat > "${SUPERVISOR_CONF_D}/openvdm_sample_ftp.${SUPERVISOR_PROG_EXT}" << EOF
+[program:openvdm_sample_ftp]
+command=${INSTALL_ROOT}/openvdm/venv/bin/python utils/sample_ftp_server.py --root ${SAMPLE_DATA_ROOT} --user ${OPENVDM_USER} --password-file /etc/openvdm_sample_ftp.passwd --port 2121
+directory=${INSTALL_ROOT}/openvdm
+redirect_stderr=true
+stdout_logfile=/var/log/openvdm/sample_ftp.log
+user=${OPENVDM_USER}
+autostart=true
+autorestart=true
+stopsignal=INT
+EOF
+
+    supervisorctl reread
+    supervisorctl update
+    # Pick up a changed password or script on re-install
+    supervisorctl restart openvdm_sample_ftp
+}
+
+
+###########################################################################
+###########################################################################
 # Install OpenVDM
 function update_openvdm {
     # Expect the following shell variables to be appropriately set:
@@ -423,22 +486,38 @@ EOF
 
     cd ${startingDir}
 
-    cp  ${INSTALL_ROOT}/openvdm/server/plugins/em302_plugin.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/em302_plugin.py
-    cp  ${INSTALL_ROOT}/openvdm/server/plugins/parsers/geotiff_parser.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/parsers/geotiff_parser.py
+    # Enable the sample data plugins and the parsers they import. The parsers
+    # are read from each plugin's "from server.plugins.parsers.<name> import"
+    # lines, so the list can't fall behind the plugins (#6, as in
+    # OceanDataTools/openvdm#270).
+    local PLUGIN_DIR="${INSTALL_ROOT}/openvdm/server/plugins"
+    local plugin parser
+    for plugin in ctd_plugin.py em302_plugin.py openrvdas_plugin.py rov_openrvdas_plugin.py \
+            xbt_plugin.py; do
+        if [ ! -e "${PLUGIN_DIR}/${plugin}.dist" ]; then
+            echo "WARNING: ${plugin}.dist not found; plugin not enabled"
+            continue
+        fi
+        cp "${PLUGIN_DIR}/${plugin}.dist" "${PLUGIN_DIR}/${plugin}"
+        for parser in $(grep -oE '^from server\.plugins\.parsers\.[A-Za-z0-9_]+' "${PLUGIN_DIR}/${plugin}" | sed 's/.*\.//' | sort -u); do
+            if [ -e "${PLUGIN_DIR}/parsers/${parser}.py.dist" ]; then
+                cp "${PLUGIN_DIR}/parsers/${parser}.py.dist" "${PLUGIN_DIR}/parsers/${parser}.py"
+            else
+                echo "WARNING: ${plugin} imports ${parser}, but parsers/${parser}.py.dist was not found"
+            fi
+        done
+    done
+    chown -R "${OPENVDM_USER}:${OPENVDM_USER}" "${PLUGIN_DIR}"
 
-    cp  ${INSTALL_ROOT}/openvdm/server/plugins/openrvdas_plugin.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/openrvdas_plugin.py
-    cp  ${INSTALL_ROOT}/openvdm/server/plugins/parsers/gga_parser.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/parsers/gga_parser.py
-    cp  ${INSTALL_ROOT}/openvdm/server/plugins/parsers/met_parser.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/parsers/met_parser.py
-    cp  ${INSTALL_ROOT}/openvdm/server/plugins/parsers/svp_parser.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/parsers/svp_parser.py
-    cp  ${INSTALL_ROOT}/openvdm/server/plugins/parsers/tsg45_parser.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/parsers/tsg_parser.py
-    cp  ${INSTALL_ROOT}/openvdm/server/plugins/parsers/twind_parser.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/parsers/twind_parser.py
-
-    cp  ${INSTALL_ROOT}/openvdm/server/plugins/rov_openrvdas_plugin.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/rov_openrvdas_plugin.py
-    cp  ${INSTALL_ROOT}/openvdm/server/plugins/parsers/comp_pres_parser.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/parsers/comp_pres_parser.py
-    cp  ${INSTALL_ROOT}/openvdm/server/plugins/parsers/ctd_parser.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/parsers/ctd_parser.py
-    cp  ${INSTALL_ROOT}/openvdm/server/plugins/parsers/o2_parser.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/parsers/o2_parser.py
-    cp  ${INSTALL_ROOT}/openvdm/server/plugins/parsers/paro_parser.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/parsers/paro_parser.py
-    cp  ${INSTALL_ROOT}/openvdm/server/plugins/parsers/sprint_parser.py.dist ${INSTALL_ROOT}/openvdm/server/plugins/parsers/sprint_parser.py
+    # The XBT plugin's parser uses xbt-edf-qc, which OpenVDM's requirements.txt
+    # doesn't install. Pinned to a tested commit; --no-deps because OpenVDM
+    # already has its numpy and pandas, and it doesn't use xarray or netCDF4
+    # for parsing and QC (OceanDataTools/openvdm#300)
+    echo "Installing xbt-edf-qc for the XBT plugin"
+    "${INSTALL_ROOT}/openvdm/venv/bin/pip" install --no-deps --quiet \
+        "xbt-edf-qc @ git+https://github.com/botheredbybees/xbt-edf-qc.git@${XBT_EDF_QC_COMMIT}" \
+        global-land-mask \
+        || echo "WARNING: xbt-edf-qc not installed; the XBT plugin won't parse casts"
 }
 
 
@@ -517,6 +596,10 @@ configure_samba
 echo "#####################################################################"
 echo "Configuring Rsync Server"
 configure_rsync
+
+echo "#####################################################################"
+echo "Configuring FTP Server"
+configure_ftp
 
 echo "#####################################################################"
 echo "Before the sample data and tranfer configurations will work you must"
