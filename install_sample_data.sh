@@ -22,6 +22,9 @@
 
 PREFERENCES_FILE='.install_openvdm_sample_data_preferences'
 
+# xbt-edf-qc commit installed for the XBT plugin (OpenVDM's installer uses the same)
+XBT_EDF_QC_COMMIT='a784145a2dc9462d8071747b5dfcfcfd2c3fee70'
+
 ###########################################################################
 ###########################################################################
 function exit_gracefully {
@@ -429,7 +432,8 @@ EOF
     # OceanDataTools/openvdm#270).
     local PLUGIN_DIR="${INSTALL_ROOT}/openvdm/server/plugins"
     local plugin parser
-    for plugin in ctd_plugin.py em302_plugin.py openrvdas_plugin.py rov_openrvdas_plugin.py; do
+    for plugin in ctd_plugin.py em302_plugin.py openrvdas_plugin.py rov_openrvdas_plugin.py \
+            xbt_plugin.py; do
         if [ ! -e "${PLUGIN_DIR}/${plugin}.dist" ]; then
             echo "WARNING: ${plugin}.dist not found; plugin not enabled"
             continue
@@ -444,6 +448,16 @@ EOF
         done
     done
     chown -R "${OPENVDM_USER}:${OPENVDM_USER}" "${PLUGIN_DIR}"
+
+    # The XBT plugin's parser uses xbt-edf-qc, which OpenVDM's requirements.txt
+    # doesn't install. Pinned to a tested commit; --no-deps because OpenVDM
+    # already has its numpy and pandas, and it doesn't use xarray or netCDF4
+    # for parsing and QC (OceanDataTools/openvdm#300)
+    echo "Installing xbt-edf-qc for the XBT plugin"
+    "${INSTALL_ROOT}/openvdm/venv/bin/pip" install --no-deps --quiet \
+        "xbt-edf-qc @ git+https://github.com/botheredbybees/xbt-edf-qc.git@${XBT_EDF_QC_COMMIT}" \
+        global-land-mask \
+        || echo "WARNING: xbt-edf-qc not installed; the XBT plugin won't parse casts"
 }
 
 
