@@ -429,7 +429,7 @@ EOF
     # OceanDataTools/openvdm#270).
     local PLUGIN_DIR="${INSTALL_ROOT}/openvdm/server/plugins"
     local plugin parser
-    for plugin in em302_plugin.py openrvdas_plugin.py rov_openrvdas_plugin.py; do
+    for plugin in ctd_plugin.py em302_plugin.py openrvdas_plugin.py rov_openrvdas_plugin.py; do
         if [ ! -e "${PLUGIN_DIR}/${plugin}.dist" ]; then
             echo "WARNING: ${plugin}.dist not found; plugin not enabled"
             continue
