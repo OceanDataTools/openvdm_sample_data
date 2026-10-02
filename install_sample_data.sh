@@ -363,6 +363,66 @@ function configure_directories {
 
 ###########################################################################
 ###########################################################################
+# Local FTP server for the sample FTP transfers (ROV_OpenRVDAS, cruise_ftp),
+# set up as OpenVDM's installer does: pyftpdlib, run by Supervisor, listening
+# on localhost only (port 2121 supports MLSD, port 2122 doesn't). Its password
+# is the one the sample transfers are configured with (#19).
+function configure_ftp {
+    # Expect the following shell variables to be appropriately set:
+    # INSTALL_ROOT - path where OpenVDM is installed
+    # OPENVDM_USER - valid userid
+    # SAMPLE_DATA_ROOT - path to the sample data
+    # OPENVDM_SMBUSER_PASSWD - the sample transfers' password
+
+    local FTP_SERVER="${INSTALL_ROOT}/openvdm/utils/sample_ftp_server.py"
+    local SUPERVISOR_CONF_D SUPERVISOR_PROG_EXT
+
+    mkdir -p "${SAMPLE_DATA_ROOT}/ftp_source" "${SAMPLE_DATA_ROOT}/ftp_destination"
+    chown -R "${OPENVDM_USER}:${OPENVDM_USER}" "${SAMPLE_DATA_ROOT}/ftp_source" "${SAMPLE_DATA_ROOT}/ftp_destination"
+
+    if [ ! -e "${FTP_SERVER}" ]; then
+        echo "WARNING: ${FTP_SERVER} not found (it comes with OpenVDM 2.16); the sample FTP transfers won't run"
+        return
+    fi
+    if [ -d /etc/supervisor/conf.d ]; then
+        SUPERVISOR_CONF_D=/etc/supervisor/conf.d
+        SUPERVISOR_PROG_EXT=conf
+    elif [ -d /etc/supervisord.d ]; then
+        SUPERVISOR_CONF_D=/etc/supervisord.d
+        SUPERVISOR_PROG_EXT=ini
+    else
+        echo "WARNING: no Supervisor configuration directory found; the sample FTP transfers won't run"
+        return
+    fi
+
+    "${INSTALL_ROOT}/openvdm/venv/bin/pip" install pyftpdlib --quiet
+
+    printf '%s\n' "${OPENVDM_SMBUSER_PASSWD}" > /etc/openvdm_sample_ftp.passwd
+    chown "${OPENVDM_USER}:${OPENVDM_USER}" /etc/openvdm_sample_ftp.passwd
+    chmod 600 /etc/openvdm_sample_ftp.passwd
+
+    mkdir -p /var/log/openvdm
+    cat > "${SUPERVISOR_CONF_D}/openvdm_sample_ftp.${SUPERVISOR_PROG_EXT}" << EOF
+[program:openvdm_sample_ftp]
+command=${INSTALL_ROOT}/openvdm/venv/bin/python utils/sample_ftp_server.py --root ${SAMPLE_DATA_ROOT} --user ${OPENVDM_USER} --password-file /etc/openvdm_sample_ftp.passwd --port 2121
+directory=${INSTALL_ROOT}/openvdm
+redirect_stderr=true
+stdout_logfile=/var/log/openvdm/sample_ftp.log
+user=${OPENVDM_USER}
+autostart=true
+autorestart=true
+stopsignal=INT
+EOF
+
+    supervisorctl reread
+    supervisorctl update
+    # Pick up a changed password or script on re-install
+    supervisorctl restart openvdm_sample_ftp
+}
+
+
+###########################################################################
+###########################################################################
 # Install OpenVDM
 function update_openvdm {
     # Expect the following shell variables to be appropriately set:
@@ -536,6 +596,10 @@ configure_samba
 echo "#####################################################################"
 echo "Configuring Rsync Server"
 configure_rsync
+
+echo "#####################################################################"
+echo "Configuring FTP Server"
+configure_ftp
 
 echo "#####################################################################"
 echo "Before the sample data and tranfer configurations will work you must"

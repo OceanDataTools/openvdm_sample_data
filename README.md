@@ -31,9 +31,7 @@ See the openvdm `INSTALL.md` for details.
 2. Run the script as root.
 3. In the OpenVDM web UI, run the tasks the script lists when it finishes (Rebuild Cruise Directory, Re-export the OpenVDM Configuration, Rebuild Data Dashboard, etc.).
 
-The script sets up the Samba shares and rsync modules, imports the sample database configuration, and enables the sample plugins and parsers. It doesn't set up the following, so the transfers that need them won't run:
-- **the local FTP server**, used by the sample FTP transfers;
-- **lowering components**, used by the lowering-level transfers such as ROV_OpenRVDAS. Turn them on with **Show Lowering Components** on the cruise's edit page.
+The script sets up the Samba shares, the rsync modules and the local FTP server used by the sample FTP transfers (a `pyftpdlib` server, run by Supervisor on localhost ports 2121 and 2122; it needs OpenVDM 2.16 or later), imports the sample database configuration, and enables the sample plugins and parsers. It doesn't turn on **lowering components**, which the lowering-level transfers such as ROV_OpenRVDAS need: turn them on with **Show Lowering Components** on the cruise's edit page.
 
 ## Sample plugins
 
