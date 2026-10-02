@@ -37,10 +37,11 @@ The script sets up the Samba shares and rsync modules, imports the sample databa
 
 ## Sample plugins
 
-The sample data enables three plugins from the openvdm repository, and the parsers each of them imports:
+The sample data enables four plugins from the openvdm repository, and the parsers each of them imports:
 
 | Plugin | Parsers |
 |---|---|
+| `ctd_plugin.py` | `ctd_profile_parser` |
 | `em302_plugin.py` | `geotiff_titiler_parser` |
 | `openrvdas_plugin.py` | `gga_parser`, `met_parser`, `ssv_parser`, `tsg45_parser`, `twind_parser` |
 | `rov_openrvdas_plugin.py` | `comp_pres_parser`, `ctd_parser`, `gga_parser`, `o2_parser`, `paro_parser`, `sprint_parser` |
