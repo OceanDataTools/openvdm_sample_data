@@ -26,6 +26,7 @@ CREATE TABLE `OVDM_CollectionSystemTransfers` (
   `collectionSystemTransferID` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` tinytext NOT NULL,
   `longName` text,
+  `description` text,
   `cruiseOrLowering` int(1) unsigned NOT NULL DEFAULT '0',
   `sourceDir` tinytext,
   `destDir` tinytext,
@@ -72,12 +73,12 @@ CREATE TABLE `OVDM_CollectionSystemTransfers` (
 
 LOCK TABLES `OVDM_CollectionSystemTransfers` WRITE;
 /*!40000 ALTER TABLE `OVDM_CollectionSystemTransfers` DISABLE KEYS */;
-INSERT INTO `OVDM_CollectionSystemTransfers` (`collectionSystemTransferID`, `name`, `longName`, `cruiseOrLowering`, `sourceDir`, `destDir`, `staleness`, `removeSourceFiles`, `useStartDate`, `skipEmptyDirs`, `skipEmptyFiles`, `syncFromSource`, `transferType`, `localDirIsMountPoint`, `rsyncServer`, `rsyncUser`, `rsyncPass`, `smbServer`, `smbUser`, `smbPass`, `smbDomain`, `sshServer`, `sshUser`, `sshUseKey`, `sshPass`, `ftpServer`, `ftpUser`, `ftpPass`, `includeFilter`, `excludeFilter`, `ignoreFilter`, `status`, `enable`, `pid`, `bandwidthLimit`) VALUES (1,'OpenRVDAS','OpenRVDAS (SSH Server)',0,'/data/sample_data/ssh_source/OpenRVDAS','OpenRVDAS',0,0,0,1,1,0,4,0,'','','','','','','','127.0.0.1','survey',1,NULL,NULL,NULL,NULL,'*','','',2,1,0,0),
-(2,'XBT','XBT  (Authenticated SMB Share)',0,'XBT','XBT',0,0,0,1,1,0,3,0,'','','','//localhost/SampleAuthSource','survey','sample_smb_passwd','WORKGROUP','','',0,'',NULL,NULL,NULL,'*{cruiseID}_XBT[0-9][0-9][0-9]_*','','',2,1,0,0),
-(3,'EM302','EM302 Multibeam (Rsync Server)',0,'/EM302','EM302',0,0,0,1,1,0,2,0,'localhost/sample_data','survey','b4dPassword!','','','','','','',0,'',NULL,NULL,NULL,'*','','',2,1,0,0),
-(4,'CTD','SBE 911+ CTD (Local Directory)',0,'/data/sample_data/local_source/CTD','CTD',0,0,0,1,1,0,1,0,'','','','','','','','','',0,'',NULL,NULL,NULL,'*{cruiseID}_CTD[0-9][0-9][0-9]_*','','*decktest*',2,1,0,0),
-(5,'Sealog','Sealog (Guest SMB Share)',0,'sealog','Sealog',0,0,0,1,1,0,3,0,'','','','//localhost/SampleAnonSource','guest','','WORKGROUP','','',0,'',NULL,NULL,NULL,'*','','',2,1,0,0),
-(6,'ROV_OpenRVDAS','OpenRVDAS collecting data for ROV (FTP Server)',1,'/ftp_source/OpenRVDAS','OpenRVDAS',0,0,0,1,1,0,5,0,'','','','','','','','','',0,'','127.0.0.1:2121','survey','sample_smb_passwd','*','','',2,1,0,0);
+INSERT INTO `OVDM_CollectionSystemTransfers` (`collectionSystemTransferID`, `name`, `longName`, `description`, `cruiseOrLowering`, `sourceDir`, `destDir`, `staleness`, `removeSourceFiles`, `useStartDate`, `skipEmptyDirs`, `skipEmptyFiles`, `syncFromSource`, `transferType`, `localDirIsMountPoint`, `rsyncServer`, `rsyncUser`, `rsyncPass`, `smbServer`, `smbUser`, `smbPass`, `smbDomain`, `sshServer`, `sshUser`, `sshUseKey`, `sshPass`, `ftpServer`, `ftpUser`, `ftpPass`, `includeFilter`, `excludeFilter`, `ignoreFilter`, `status`, `enable`, `pid`, `bandwidthLimit`) VALUES (1,'OpenRVDAS','OpenRVDAS (SSH Server)',CONCAT('##### Source: OpenRVDAS underway data logging system', CHAR(10), '##### Files:', CHAR(10), ' - **`raw/MET-<YYYYmmDD>-<HHMMSS>.txt`**: Meteorological data', CHAR(10), ' - **`raw/POSMV_GGA-<YYYYmmDD>-<HHMMSS>.txt`**: GGA NMEA-formatted position data', CHAR(10), ' - **`raw/SVP-<YYYYmmDD>-<HHMMSS>.txt`**: SVP70 Surface SV probe data', CHAR(10), ' - **`raw/TSG_Raw-<YYYYmmDD>-<HHMMSS>.txt`**: SBE45 TSG data'),0,'/data/sample_data/ssh_source/OpenRVDAS','OpenRVDAS',0,0,0,1,1,0,4,0,'','','','','','','','127.0.0.1','survey',1,NULL,NULL,NULL,NULL,'*','','',2,1,0,0),
+(2,'XBT','XBT  (Authenticated SMB Share)',CONCAT('##### Source: Sippican Mk21 XBT Processing System', CHAR(10), '##### Files:', CHAR(10), ' - **`{cruiseID}_XBT[0-9][0-9][0-9]_<mmDD>.edf`**: Raw XBT data'),0,'/XBT','XBT',0,0,0,1,1,0,3,0,'','','','//localhost/SampleAuthSource','survey','sample_smb_passwd','WORKGROUP','','',0,'',NULL,NULL,NULL,'*{cruiseID}_XBT[0-9][0-9][0-9]_{mm}{DD}*','','',2,1,0,0),
+(3,'EM302','EM302 Multibeam (Rsync Server)',CONCAT('##### Source: Kongsberg EM302 MBES Mapping sonar', CHAR(10), '##### Files:', CHAR(10), ' - **`*.kmwall`**: raw seafloor mapping data.', CHAR(10), ' - **`*.kmwcd`**: raw water column mapping data.', CHAR(10), ' - **`*.tiff`**: GeoTIFF rastered data product created from raw data.'),0,'/EM302','EM302',0,0,0,1,1,0,2,0,'localhost/sample_data','survey','b4dPassword!','','','','','','',0,'',NULL,NULL,NULL,'*','','',2,1,0,0),
+(4,'CTD','SBE 911+ CTD (Local Directory)',CONCAT('##### Source: SBE 911+ CTD', CHAR(10), '##### Files:', CHAR(10), ' - **`{cruiseID}_CTD###_<mmDD>.XMLCON`**: Cast configuration data', CHAR(10), ' - **`{cruiseID}_CTD###_<mmDD>.bl`**: Cast bottle data', CHAR(10), ' - **`{cruiseID}_CTD###_<mmDD>.hdr`**: Cast header data', CHAR(10), ' - **`{cruiseID}_CTD###_<mmDD>.hex`**: Cast raw data'),0,'/data/sample_data/local_source/CTD','CTD',0,0,0,1,1,0,1,0,'','','','','','','','','',0,'',NULL,NULL,NULL,'*/{cruiseID}_CTD[0-9][0-9][0-9]_{mm}{DD}*','','*decktest*',2,1,0,0),
+(5,'Sealog','Sealog (Guest SMB Share)','##### Source: Sealog Event logging system',0,'/sealog','Sealog',0,0,0,1,1,0,3,0,'','','','//localhost/SampleAnonSource','guest','','WORKGROUP','','',0,'',NULL,NULL,NULL,'*','','',2,1,0,0),
+(6,'ROV_OpenRVDAS','OpenRVDAS collecting data for ROV (FTP Server)',CONCAT('#### Source: Cropped versions of the raw OpenRVDAS data files. Created as part of the Sealog data export process.', CHAR(10), '##### Files:', CHAR(10), ' - **`CTD_Raw-<YYYYmmDD>-<HHMMSS>.txt`**: FastCAT45 CTD data', CHAR(10), ' - **`Mech_Comps_Raw-<YYYYmmDD>-<HHMMSS>.txt`**: Hydraulic compensator pressure data', CHAR(10), ' - **`O2_Raw-<YYYYmmDD>-<HHMMSS>.txt`**: Dissolved oxygen data', CHAR(10), ' - **`Paro_Depth_Raw-<YYYYmmDD>-<HHMMSS>.txt`**: Paro depth data', CHAR(10), ' - **`Sprint_Raw-<YYYYmmDD>-<HHMMSS>.txt`**: SPRINT navigation data', CHAR(10), ' - **`USBL_Pri_GGA_Raw-<YYYYmmDD>-<HHMMSS>.txt`**: Primary USBL position data', CHAR(10), ' - **`USBL_Sec_GGA_Raw-<YYYYmmDD>-<HHMMSS>.txt`**: Secondary USBL position data'),1,'/ftp_source/OpenRVDAS','OpenRVDAS',0,0,0,1,1,0,5,0,'','','','','','','','','',0,'','127.0.0.1:2121','survey','sample_smb_passwd','*','','',2,1,0,0);
 /*!40000 ALTER TABLE `OVDM_CollectionSystemTransfers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -157,12 +158,13 @@ CREATE TABLE `OVDM_ExtraDirectories` (
   `extraDirectoryID` int unsigned NOT NULL AUTO_INCREMENT,
   `name` tinytext NOT NULL,
   `longName` tinytext,
+  `description` text,
   `cruiseOrLowering` int(1) unsigned NOT NULL DEFAULT '0',
   `destDir` tinytext NOT NULL,
   `enable` tinyint(1) DEFAULT '0',
   `required` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`extraDirectoryID`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -171,10 +173,11 @@ CREATE TABLE `OVDM_ExtraDirectories` (
 
 LOCK TABLES `OVDM_ExtraDirectories` WRITE;
 /*!40000 ALTER TABLE `OVDM_ExtraDirectories` DISABLE KEYS */;
-INSERT INTO `OVDM_ExtraDirectories` (`extraDirectoryID`, `name`, `longName`, `cruiseOrLowering`, `destDir`, `enable`, `required`) VALUES (1,'Transfer_Logs','Transfer Logs',0,'OpenVDM/TransferLogs',1,1),
-(2,'Dashboard_Data','Dashboard Data',0,'OpenVDM/DashboardData',1,1),
-(3,'From_PublicData','Files copied from PublicData share',0,'From_PublicData',1,1),
-(4,'Tracklines','Cruise Tracklines',0,'Products/Tracklines',1,0);
+INSERT INTO `OVDM_ExtraDirectories` (`extraDirectoryID`, `name`, `longName`, `description`, `cruiseOrLowering`, `destDir`, `enable`, `required`) VALUES (1,'Transfer_Logs','Transfer Logs',NULL,0,'OpenVDM/TransferLogs',1,1),
+(2,'Dashboard_Data','Dashboard Data',CONCAT('Contents: the files OpenVDM''s Data Dashboard is built from: the data and quality test results its plugins extract from the collection systems'' raw files, and the manifest that lists them. Written by OpenVDM.', CHAR(10), 'Files: JSON (.json): one for each processed raw file, and the manifest.', CHAR(10), 'Sub-directories: the same folders as the raw files in the cruise directory. Each lowering''s files and manifest are under its lowering''s folder.'),0,'OpenVDM/DashboardData',1,1),
+(3,'From_PublicData','Files copied from PublicData share',CONCAT('Contents: files from the ship''s PublicData share, where scientists and crew share files during the cruise, copied here when the cruise is finalized.', CHAR(10), 'Files: any type, as saved on the share.', CHAR(10), 'Sub-directories: as on the PublicData share.'),0,'From_PublicData',1,1),
+(4,'Tracklines','Cruise Tracklines','Contains geoJSON and KML versions of the cruise''s trackline from each of the available position sources.',0,'Products/Tracklines',1,0),
+(5,'CTD_Plots','CTD Plots','Contains png images of the CTD casts. The names of the files correlate to the .hex raw file names.',0,'CTD/Plots',1,0);
 /*!40000 ALTER TABLE `OVDM_ExtraDirectories` ENABLE KEYS */;
 UNLOCK TABLES;
 
