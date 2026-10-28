@@ -228,7 +228,7 @@ UPDATE `OVDM_CoreVars` SET `value` = 'Gulf of Mexico Exploration' WHERE `name` =
 UPDATE `OVDM_CoreVars` SET `value` = 'The Gulf of Mexico mission operated in the sediments of which are part of the upward-moving Louann Formation.' WHERE `name` = 'cruiseDescription';
 UPDATE `OVDM_CoreVars` SET `value` = 'Adam Skarke' WHERE `name` = 'cruisePI';
 UPDATE `OVDM_CoreVars` SET `value` = 'Gulf of Mexico' WHERE `name` = 'cruiseLocation';
-UPDATE `OVDM_CoreVars` SET `value` = '2012/04/28 00:00' WHERE `name` = 'cruiseStartDate';
+UPDATE `OVDM_CoreVars` SET `value` = '2012/04/10 00:00' WHERE `name` = 'cruiseStartDate';
 UPDATE `OVDM_CoreVars` SET `value` = '2012/04/30 00:00' WHERE `name` = 'cruiseEndDate';
 UPDATE `OVDM_CoreVars` SET `value` = 'Pascagoula, MS' WHERE `name` = 'cruiseStartPort';
 UPDATE `OVDM_CoreVars` SET `value` = 'Galveston, TX' WHERE `name` = 'cruiseEndPort';
