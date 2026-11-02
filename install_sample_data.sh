@@ -266,6 +266,25 @@ EOF
     systemctl enable rsync.service
 }
 
+# Extract the sample data into ${SAMPLE_DATA_ROOT}. The archive was made on
+# a Mac, so don't keep its owners: give everything to the OpenVDM user (#25).
+# Older archives store the top directory as 700, so open it up for the guest
+# shares (#28).
+function extract_sample_data {
+
+    tar xvzf ~/openvdm_sample_data/sample_data.tgz --no-same-owner -C ${SAMPLE_DATA_ROOT}
+
+    chown -R ${OPENVDM_USER}:${OPENVDM_USER} ${SAMPLE_DATA_ROOT}
+
+    chmod 755 ${SAMPLE_DATA_ROOT}
+
+    chmod -R 777 ${SAMPLE_DATA_ROOT}/anon_destination
+
+    chmod -R 777 ${SAMPLE_DATA_ROOT}/anon_source
+
+}
+
+
 function configure_directories {
 
     if [ ! -d $SAMPLE_DATA_ROOT ]; then
@@ -276,54 +295,14 @@ function configure_directories {
 
                     mkdir -p ${SAMPLE_DATA_ROOT}
 
-                    tar xvzf ~/openvdm_sample_data/sample_data.tgz -C ${SAMPLE_DATA_ROOT}
-
-                    chmod -R 777 ${SAMPLE_DATA_ROOT}/anon_destination
-
-                    chmod -R 777 ${SAMPLE_DATA_ROOT}/anon_source
-
-                    chown -R ${OPENVDM_USER}:${OPENVDM_USER} ${SAMPLE_DATA_ROOT}/auth_destination
-
-                    chown -R ${OPENVDM_USER}:${OPENVDM_USER} ${SAMPLE_DATA_ROOT}/auth_source
-
-                    chown -R ${OPENVDM_USER}:${OPENVDM_USER} ${SAMPLE_DATA_ROOT}/local_destination
-
-                    chown -R ${OPENVDM_USER}:${OPENVDM_USER} ${SAMPLE_DATA_ROOT}/rsync_destination
-                    
-                    chown -R ${OPENVDM_USER}:${OPENVDM_USER} ${SAMPLE_DATA_ROOT}/rsync_source
-
-                    chown -R ${OPENVDM_USER}:${OPENVDM_USER} ${SAMPLE_DATA_ROOT}/ssdw
-                    
-                    chown -R ${OPENVDM_USER}:${OPENVDM_USER} ${SAMPLE_DATA_ROOT}/ssh_destination
-                    
-                    chown -R ${OPENVDM_USER}:${OPENVDM_USER} ${SAMPLE_DATA_ROOT}/ssh_source
+                    extract_sample_data
 
                     break;;
                 "" )
 
                     mkdir -p ${SAMPLE_DATA_ROOT}
 
-                    tar xvzf ~/openvdm_sample_data/sample_data.tgz -C ${SAMPLE_DATA_ROOT}
-
-                    chmod -R 777 ${SAMPLE_DATA_ROOT}/anon_destination
-
-                    chmod -R 777 ${SAMPLE_DATA_ROOT}/anon_source
-
-                    chown -R ${OPENVDM_USER}:${OPENVDM_USER} ${SAMPLE_DATA_ROOT}/auth_destination
-
-                    chown -R ${OPENVDM_USER}:${OPENVDM_USER} ${SAMPLE_DATA_ROOT}/auth_source
-
-                    chown -R ${OPENVDM_USER}:${OPENVDM_USER} ${SAMPLE_DATA_ROOT}/local_destination
-
-                    chown -R ${OPENVDM_USER}:${OPENVDM_USER} ${SAMPLE_DATA_ROOT}/rsync_destination
-                    
-                    chown -R ${OPENVDM_USER}:${OPENVDM_USER} ${SAMPLE_DATA_ROOT}/rsync_source
-
-                    chown -R ${OPENVDM_USER}:${OPENVDM_USER} ${SAMPLE_DATA_ROOT}/ssdw
-                    
-                    chown -R ${OPENVDM_USER}:${OPENVDM_USER} ${SAMPLE_DATA_ROOT}/ssh_destination
-                    
-                    chown -R ${OPENVDM_USER}:${OPENVDM_USER} ${SAMPLE_DATA_ROOT}/ssh_source
+                    extract_sample_data
 
                     break;;
                 [Nn]* )
@@ -334,27 +313,7 @@ function configure_directories {
         done
     else
 
-        tar xvzf ~/openvdm_sample_data/sample_data.tgz -C ${SAMPLE_DATA_ROOT}
-
-        chmod -R 777 ${SAMPLE_DATA_ROOT}/anon_destination
-
-        chmod -R 777 ${SAMPLE_DATA_ROOT}/anon_source
-
-        chown -R ${OPENVDM_USER}:${OPENVDM_USER} ${SAMPLE_DATA_ROOT}/auth_destination
-
-        chown -R ${OPENVDM_USER}:${OPENVDM_USER} ${SAMPLE_DATA_ROOT}/auth_source
-
-        chown -R ${OPENVDM_USER}:${OPENVDM_USER} ${SAMPLE_DATA_ROOT}/local_destination
-
-        chown -R ${OPENVDM_USER}:${OPENVDM_USER} ${SAMPLE_DATA_ROOT}/rsync_destination
-        
-        chown -R ${OPENVDM_USER}:${OPENVDM_USER} ${SAMPLE_DATA_ROOT}/rsync_source
-
-        chown -R ${OPENVDM_USER}:${OPENVDM_USER} ${SAMPLE_DATA_ROOT}/ssdw
-        
-        chown -R ${OPENVDM_USER}:${OPENVDM_USER} ${SAMPLE_DATA_ROOT}/ssh_destination
-        
-        chown -R ${OPENVDM_USER}:${OPENVDM_USER} ${SAMPLE_DATA_ROOT}/ssh_source
+        extract_sample_data
 
     fi
 
