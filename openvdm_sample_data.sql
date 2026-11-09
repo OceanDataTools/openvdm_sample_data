@@ -173,8 +173,7 @@ CREATE TABLE `OVDM_ExtraDirectories` (
 
 LOCK TABLES `OVDM_ExtraDirectories` WRITE;
 /*!40000 ALTER TABLE `OVDM_ExtraDirectories` DISABLE KEYS */;
-INSERT INTO `OVDM_ExtraDirectories` (`extraDirectoryID`, `name`, `longName`, `description`, `cruiseOrLowering`, `destDir`, `enable`, `required`) VALUES (1,'Transfer_Logs','Transfer Logs',NULL,0,'OpenVDM/TransferLogs',1,1),
-(2,'Dashboard_Data','Dashboard Data',CONCAT('The files OpenVDM''s Data Dashboard is built from: the data and quality test results its plugins extract from the collection systems'' raw files. Written by OpenVDM.', CHAR(10), CHAR(10), '**Files:**', CHAR(10), '- `*.json`: the data and quality test results extracted from one raw file', CHAR(10), '- the manifest (JSON): the list of these files that the Data Dashboard reads', CHAR(10), CHAR(10), '**Sub-directories:**', CHAR(10), '- the same folders as the raw files in the cruise directory, for the files extracted from them', CHAR(10), '- each lowering''s files and manifest are under its lowering''s folder'),0,'OpenVDM/DashboardData',1,1),
+INSERT INTO `OVDM_ExtraDirectories` (`extraDirectoryID`, `name`, `longName`, `description`, `cruiseOrLowering`, `destDir`, `enable`, `required`) VALUES (2,'Dashboard_Data','Dashboard Data',CONCAT('The files OpenVDM''s Data Dashboard is built from: the data and quality test results its plugins extract from the collection systems'' raw files. Written by OpenVDM.', CHAR(10), CHAR(10), '**Files:**', CHAR(10), '- `*.json`: the data and quality test results extracted from one raw file', CHAR(10), '- the manifest (JSON): the list of these files that the Data Dashboard reads', CHAR(10), CHAR(10), '**Sub-directories:**', CHAR(10), '- the same folders as the raw files in the cruise directory, for the files extracted from them', CHAR(10), '- each lowering''s files and manifest are under its lowering''s folder'),0,'OpenVDM/DashboardData',1,1),
 (3,'From_PublicData','Files copied from PublicData share',CONCAT('Files from the ship''s PublicData share, where scientists and crew share files during the cruise, copied here when the cruise is finalized.', CHAR(10), CHAR(10), '**Files:**', CHAR(10), '- any type, as saved on the share', CHAR(10), CHAR(10), '**Sub-directories:**', CHAR(10), '- the same folders as on the PublicData share'),0,'From_PublicData',1,1),
 (4,'Tracklines','Cruise Tracklines',NULL,0,'Products/Tracklines',1,0),
 (5,'NAV_QA','NAV QA Products','',0,'Products/NAV_QA',1,0);
@@ -210,9 +209,8 @@ CREATE TABLE `OVDM_ShipToShoreTransfers` (
 LOCK TABLES `OVDM_ShipToShoreTransfers` WRITE;
 /*!40000 ALTER TABLE `OVDM_ShipToShoreTransfers` DISABLE KEYS */;
 INSERT INTO `OVDM_ShipToShoreTransfers` (`shipToShoreTransferID`, `name`, `longName`, `priority`, `collectionSystem`, `extraDirectory`, `includeFilter`, `enable`, `required`) VALUES (1,'DashboardData','Dashboard Data',1,0,2,'*',1,1),
-(2,'TransferLogs','Transfer Logs',1,0,1,'*',0,1),
-(3,'MD5Summary','MD5 Summary',1,0,0,'MD5_Summary.txt,MD5_Summary.md5 ',1,1),
-(4,'OVDM_Config','OpenVDM Configuration',1,0,0,'ovdmConfig.json',1,1),
+(3,'MD5Summary','MD5 Summary',1,0,0,'{md5_summary_fn},{md5_summary_md5_fn}',1,1),
+(4,'OVDM_Config','OpenVDM Configuration',1,0,0,'{cruise_config_fn}',1,1),
 (5,'GGA_FILES','GGA Files',1,1,0,'*_GGA-*.txt',1,0),
 (6,'MET','Met raw files',3,1,0,'*MET-*.txt,*TSG_Raw-*.txt',1,0);
 /*!40000 ALTER TABLE `OVDM_ShipToShoreTransfers` ENABLE KEYS */;
